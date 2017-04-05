@@ -129,6 +129,9 @@ Peer.prototype.handleMessage = function (message) {
         if (!this.nick) this.nick = message.payload.nick;
         delete message.payload.nick;
         this.pc.handleAnswer(message.payload);
+    } else if (message.type === 'command_video' || message.type === 'command_audio'
+        || message.type === 'command_door' || message.type === 'command_reject') {
+        this.parent.emit(message.type, {from: message.from, data: message});
     } else if (message.type === 'candidate') {
         this.pc.processIce(message.payload);
     } else if (message.type === 'connectivityError') {
